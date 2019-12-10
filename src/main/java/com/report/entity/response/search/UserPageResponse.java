@@ -7,21 +7,21 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.report.entity.response.PageResponse;
-import com.report.entity.response.TeamResponse;
+import com.report.entity.response.UserResponse;
 
-public class TeamPageResponse extends PageResponse<TeamResponse> {
+public class UserPageResponse extends PageResponse<UserResponse> {
     private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("rawtypes")
     @Override
-    protected List<TeamResponse> parseResult(List rawResults) {
+    protected List<UserResponse> parseResult(List rawResults) {
         if (CollectionUtils.isEmpty(rawResults)) {
             return null;
         }
-        List<TeamResponse> responses = new ArrayList<TeamResponse>();
-        TeamResponse response;
+        List<UserResponse> responses = new ArrayList<UserResponse>();
+        UserResponse response;
         for (Object rawResult : rawResults) {
-            response = new TeamResponse();
+            response = new UserResponse();
             BeanUtils.copyProperties(rawResult, response);
             responses.add(response);
         }

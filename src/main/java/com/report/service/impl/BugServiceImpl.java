@@ -16,7 +16,7 @@ import com.report.dao.BugDao;
 import com.report.entity.Bug;
 import com.report.entity.ResultBean;
 import com.report.entity.request.BugPageResponse;
-import com.report.entity.response.search.BugSearchListRequest;
+import com.report.entity.request.BugSearchListRequest;
 import com.report.service.BugService;
 import com.report.utils.Constants;
 import com.report.utils.DataUtil;

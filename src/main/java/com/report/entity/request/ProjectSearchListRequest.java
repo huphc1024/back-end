@@ -1,11 +1,11 @@
-package com.report.entity.response.search;
+package com.report.entity.request;
 
 import org.apache.commons.collections4.MapUtils;
 
-import com.report.entity.Team;
-import com.report.entity.request.PageRequest;
+import com.report.entity.Project;
+import com.report.entity.response.search.ProjectPageResponse;
 
-public class TeamSearchListRequest extends PageRequest {
+public class ProjectSearchListRequest extends PageRequest {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class TeamSearchListRequest extends PageRequest {
                 case "created":
                     sqlWhere.append(String.format(" AND t.created >= :%s ", k));
                     break;
-                case "role":
-                    sqlWhere.append(String.format(" AND r.name = :%s ", k));
-                    break;
                 case "userId":
                     sqlWhere.append(String.format(" AND tu.userId = :%s ", k));
+                    break;
+                case "tuDelFlg":
+                    sqlWhere.append(String.format(" AND tu.delFlg = :%s ", k));
                     break;
                 default:
                     if (v instanceof String) {
@@ -50,20 +50,17 @@ public class TeamSearchListRequest extends PageRequest {
     @Override
     public StringBuilder getQuery() {
         StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT new com.report.entity.response.TeamResponse( ");
-        sql.append("    t.teamId, ");
+        sql.append(" SELECT DISTINCT new com.report.entity.response.ProjectResponse( ");
+        sql.append("    t.projectId, ");
         sql.append("    t.name, ");
-        sql.append("    u.email, ");
+        sql.append("    t.description, ");
         sql.append("    t.active, ");
         sql.append("    t.created, ");
         sql.append("    t.createdbyUsername, ");
         sql.append("    t.lastmodified, ");
         sql.append("    t.lastmodifiedbyUsername, ");
-        sql.append("    tu.removed ) ");
-        sql.append(" FROM Team t INNER JOIN TeamUser tu ON tu.teamId = t.teamId ");
-        sql.append("    INNER JOIN User u ON tu.userId = u.userId ");
-        sql.append("    INNER JOIN UserRole ur ON u.userId = ur.userId ");
-        sql.append("    INNER JOIN Role r ON ur.roleId = r.roleId ");
+        sql.append("    t.delFlg ) ");
+        sql.append(" FROM Project t INNER JOIN ProjectUser tu ON tu.projectId = t.projectId ");
         appendCondition(sql);
         sql.append(getSqlSort("t"));
         return sql;
@@ -71,22 +68,20 @@ public class TeamSearchListRequest extends PageRequest {
 
     @Override
     public StringBuilder getCount() {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(t) FROM Team t INNER JOIN TeamUser tu ON tu.teamId = t.teamId"
-                + " INNER JOIN User u ON tu.userId = u.userId INNER JOIN UserRole ur ON u.userId = ur.userId"
-                + " INNER JOIN Role r ON ur.roleId = r.roleId ");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT t) FROM Project t INNER JOIN ProjectUser tu ON tu.projectId = t.projectId");
         appendCondition(sql);
         return sql;
     }
 
     @Override
-    public Class<Team> getEntityClass() {
-        return Team.class;
+    public Class<Project> getEntityClass() {
+        return Project.class;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Class<TeamPageResponse> getResponseClass() {
-        return TeamPageResponse.class;
+    public Class<ProjectPageResponse> getResponseClass() {
+        return ProjectPageResponse.class;
     }
 
 }

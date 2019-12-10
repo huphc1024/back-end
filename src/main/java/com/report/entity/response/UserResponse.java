@@ -23,9 +23,6 @@ public class UserResponse implements Serializable{
     @JsonProperty("created")
     private String created;
     
-    @JsonProperty("in_team")
-    private String inTeam;
-
     @JsonProperty("createdby_username")
     private String createdbyUsername;
 
@@ -34,24 +31,27 @@ public class UserResponse implements Serializable{
 
     @JsonProperty("lastmodifiedby_username")
     private String lastmodifiedbyUsername;
+    
+    @JsonProperty("roles")
+    private String roles;
 
     public Integer getUserId() {
         return userId;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public String getInTeam() {
-        return inTeam;
-    }
-
-    public void setInTeam(String inTeam) {
-        this.inTeam = inTeam;
-    }
-
-    public String getFullname() {
+     public String getFullname() {
         return fullname;
     }
 
@@ -101,7 +101,6 @@ public class UserResponse implements Serializable{
 
     public UserResponse() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public UserResponse(Integer userId, String fullname, String email, String created, String createdbyUsername, String lastmodified,
@@ -116,12 +115,24 @@ public class UserResponse implements Serializable{
         this.lastmodifiedbyUsername = lastmodifiedbyUsername;
     }
     
-    public UserResponse(Integer userId, String fullname, String email, String inTeam) {
+    public UserResponse(Integer userId, String fullname, String email, String created, String createdbyUsername, String lastmodified,
+            String lastmodifiedbyUsername, String roles) {
         super();
         this.userId = userId;
         this.fullname = fullname;
         this.email = email;
-        this.inTeam = inTeam;
+        this.created = created;
+        this.createdbyUsername = createdbyUsername;
+        this.lastmodified = lastmodified;
+        this.lastmodifiedbyUsername = lastmodifiedbyUsername;
+        this.roles = roles;
+    }
+    
+    public UserResponse(Integer userId, String fullname, String email) {
+        super();
+        this.userId = userId;
+        this.fullname = fullname;
+        this.email = email;
     }
     
 }

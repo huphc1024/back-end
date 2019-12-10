@@ -1,6 +1,5 @@
 package com.report.service.impl;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,8 @@ import com.report.dao.AbstractBaseDao;
 import com.report.dao.ReportDao;
 import com.report.entity.Report;
 import com.report.entity.ResultBean;
+import com.report.entity.request.ReportSearchListRequest;
+import com.report.entity.response.search.ReportPageResponse;
 import com.report.service.ReportService;
 import com.report.utils.Constants;
 import com.report.utils.DataUtil;
@@ -31,12 +32,10 @@ public class ReportServiceImpl extends AbstractBaseDao implements ReportService 
 
     @Override
     public ResultBean getReportById(Integer reportId){
-        log.info("### getReportById() START ###");
         Report task = reportDao.getReportById(reportId);
         if (Objects.isNull(task)) {
             log.info("Không tồn tại report");
         }
-        log.info("### getReportById() END ###");
         return new ResultBean(task, "200", "OK");
     }
 
@@ -75,14 +74,8 @@ public class ReportServiceImpl extends AbstractBaseDao implements ReportService 
 
     private void getReportEntity(String json, Report entity) throws Exception {
         JsonObject jsonObject = DataUtil.getJsonObject(json);
-        if (DataUtil.hasMember(jsonObject, "task_id")) {
-            entity.setTaskId(DataUtil.getJsonInteger(jsonObject, "task_id"));
-        }
-        if (DataUtil.hasMember(jsonObject, "name")) {
-            entity.setName(DataUtil.getJsonString(jsonObject, "name"));
-        }
-        if (DataUtil.hasMember(jsonObject, "description")) {
-            entity.setDescription(DataUtil.getJsonString(jsonObject, "description"));
+        if (DataUtil.hasMember(jsonObject, "issue_id")) {
+            entity.setIssueId(DataUtil.getJsonInteger(jsonObject, "issue_id"));
         }
         if (DataUtil.hasMember(jsonObject, "content")) {
             entity.setContent(DataUtil.getJsonString(jsonObject, "content"));
@@ -90,12 +83,16 @@ public class ReportServiceImpl extends AbstractBaseDao implements ReportService 
     }
 
     @Override
-    public ResultBean getReportsByTask(Integer taskId) {
-        List<Report> reports = reportDao.getReportByTask(taskId);
-        if (Objects.isNull(reports)) {
-            log.info("Không tồn tại Report nào trong task");
-        }
-        return new ResultBean(reports, "200", "OK");
+    public ResultBean getReportsByIssue(Integer issueId, Integer page, Integer size) {
+        ReportSearchListRequest searchListRequest = new ReportSearchListRequest();
+        ReportPageResponse response = null;
+        searchListRequest.currentPage(page);
+        searchListRequest.noRecordInPage(size);
+        searchListRequest.addSearchField("issueId", issueId, true);
+        searchListRequest.addSearchField("delFlg", Constants.DEL_FLG_0, true);
+        searchListRequest.addsSortField("reportId DESC");
+        response = (ReportPageResponse) reportDao.findAll(searchListRequest);
+        return new ResultBean(response, "200", "OK");
     }
 
 }

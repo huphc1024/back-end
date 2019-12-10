@@ -12,11 +12,11 @@ import com.report.dao.UserDao;
 import com.report.entity.Role;
 import com.report.entity.User;
 import com.report.entity.UserRole;
-import com.report.entity.response.LeaderResponse;
-import com.report.entity.response.UserPageResponse;
+import com.report.entity.request.UserSearchListRequest;
+import com.report.entity.response.ManagerResponse;
 import com.report.entity.response.UserResponse;
 import com.report.entity.response.UserRoleResponse;
-import com.report.entity.response.search.UserSearchListRequest;
+import com.report.entity.response.search.UserPageResponse;
 import com.report.utils.Constants;
 
 @Repository
@@ -24,9 +24,9 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<LeaderResponse> getLeaders() {
+    public List<ManagerResponse> getManagers() {
         StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT new com.report.entity.response.LeaderResponse( ");
+        sql.append(" SELECT new com.report.entity.response.ManagerResponse( ");
         sql.append("  u.userId, ");
         sql.append("  u.fullname, ");
         sql.append("  u.email) ");
@@ -38,11 +38,11 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
 
         Query query = this.getEntityManager().createQuery(sql.toString());
         query.setParameter("delFlg", Constants.DEL_FLG_0);
-        query.setParameter("role", "LEADER");
+        query.setParameter("role", "MANAGER");
 
-        List<LeaderResponse> result = null;
+        List<ManagerResponse> result = null;
         try {
-            result = (List<LeaderResponse>) query.getResultList();
+            result = (List<ManagerResponse>) query.getResultList();
         } catch (NoResultException e) {
         }
         return result;
@@ -50,40 +50,9 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<LeaderResponse> getUsersInTeam() {
+    public List<ManagerResponse> getUsers() {
         StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT new com.report.entity.response.LeaderResponse( ");
-        sql.append("  u.userId, ");
-        sql.append("  u.fullname, ");
-        sql.append("  u.email) ");
-        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
-        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
-        sql.append("      INNER JOIN TeamUser tu ON tu.userId = u.userId ");
-        sql.append(" WHERE ");
-        sql.append("    u.delFlg = :delFlg");
-        sql.append("    AND r.name = :role");
-        sql.append("    AND tu.delFlg = :tudelFlg");
-        sql.append("    AND tu.removed = :removed");
-
-        Query query = this.getEntityManager().createQuery(sql.toString());
-        query.setParameter("delFlg", Constants.DEL_FLG_0);
-        query.setParameter("tudelFlg", Constants.DEL_FLG_0);
-        query.setParameter("role", "MEMBER");
-        query.setParameter("removed", Constants.DEL_FLG_0);
-
-        List<LeaderResponse> result = null;
-        try {
-            result = (List<LeaderResponse>) query.getResultList();
-        } catch (NoResultException e) {
-        }
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<LeaderResponse> getUsers() {
-        StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT new com.report.entity.response.LeaderResponse( ");
+        sql.append(" SELECT new com.report.entity.response.ManagerResponse( ");
         sql.append("  u.userId, ");
         sql.append("  u.fullname, ");
         sql.append("  u.email) ");
@@ -97,9 +66,9 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
         query.setParameter("delFlg", Constants.DEL_FLG_0);
         query.setParameter("role", "MEMBER");
 
-        List<LeaderResponse> result = null;
+        List<ManagerResponse> result = null;
         try {
-            result = (List<LeaderResponse>) query.getResultList();
+            result = (List<ManagerResponse>) query.getResultList();
         } catch (NoResultException e) {
         }
         return result;
@@ -201,35 +170,6 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Integer> getListUserOldTeam(Integer teamId) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT ");
-        sql.append("  u.userId ");
-        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
-        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
-        sql.append("      INNER JOIN TeamUser tu ON tu.userId = ur.userId ");
-        sql.append(" WHERE ");
-        sql.append("    u.delFlg = :delFlg");
-        sql.append("    AND r.name = :role");
-        sql.append("    AND tu.teamId = :teamId");
-        sql.append("    AND tu.removed = :removed");
-
-        Query query = this.getEntityManager().createQuery(sql.toString());
-        query.setParameter("delFlg", Constants.DEL_FLG_0);
-        query.setParameter("removed", Constants.DEL_FLG_0);
-        query.setParameter("role", "MEMBER");
-        query.setParameter("teamId", teamId);
-
-        List<Integer> result = null;
-        try {
-            result = (List<Integer>) query.getResultList();
-        } catch (NoResultException e) {
-        }
-        return result;
-    }
-
     @Override
     public void addUserRole(UserRole userRole) {
         this.getEntityManager().merge(userRole);
@@ -266,31 +206,58 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<UserResponse> getUsersByTeam(Integer team_id) {
+    public List<UserResponse> getUsersByProject(Integer projectId) {
         StringBuilder sql = new StringBuilder();
         sql.append(" SELECT new com.report.entity.response.UserResponse( ");
         sql.append("  u.userId, ");
         sql.append("  u.fullname, ");
-        sql.append("  u.email, ");
-        sql.append("  tu.removed) ");
+        sql.append("  u.email) ");
         sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
         sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
-        sql.append("      INNER JOIN TeamUser tu ON tu.userId = u.userId ");
+        sql.append("      INNER JOIN ProjectUser tu ON tu.userId = u.userId ");
         sql.append(" WHERE ");
         sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND tu.delFlg = :tudelFlg");
         sql.append("    AND r.name = :role");
-        sql.append("    AND tu.removed = :removed");
-        sql.append("    AND tu.teamId = :teamId");
+        sql.append("    AND tu.projectId = :projectId");
 
         Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("tudelFlg", Constants.DEL_FLG_0);
         query.setParameter("delFlg", Constants.DEL_FLG_0);
         query.setParameter("role", "MEMBER");
-        query.setParameter("removed", Constants.DEL_FLG_0);
-        query.setParameter("teamId", team_id);
+        query.setParameter("projectId", projectId);
 
         List<UserResponse> result = null;
         try {
             result = (List<UserResponse>) query.getResultList();
+        } catch (NoResultException e) {
+        }
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<Integer> getUsersOldByProject(Integer projectId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append("  u.userId ");
+        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
+        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
+        sql.append("      INNER JOIN ProjectUser tu ON tu.userId = u.userId ");
+        sql.append(" WHERE ");
+        sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND tu.delFlg = :tudelFlg");
+        sql.append("    AND r.name = :role");
+        sql.append("    AND tu.projectId = :projectId");
+
+        Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("tudelFlg", Constants.DEL_FLG_0);
+        query.setParameter("delFlg", Constants.DEL_FLG_0);
+        query.setParameter("role", "MEMBER");
+        query.setParameter("projectId", projectId);
+
+        List<Integer> result = null;
+        try {
+            result = (List<Integer>) query.getResultList();
         } catch (NoResultException e) {
         }
         return result;
@@ -312,6 +279,122 @@ public class UserDaoIpml extends AbstractBaseDao implements UserDao {
         User result = null;
         try {
             result = (User) query.getSingleResult();
+        } catch (NoResultException e) {
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UserResponse> getManByProject(Integer projectId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT new com.report.entity.response.UserResponse( ");
+        sql.append("  u.userId, ");
+        sql.append("  u.fullname, ");
+        sql.append("  u.email) ");
+        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
+        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
+        sql.append("      INNER JOIN ProjectUser tu ON tu.userId = u.userId ");
+        sql.append(" WHERE ");
+        sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND tu.delFlg = :tudelFlg");
+        sql.append("    AND r.name = :role");
+        sql.append("    AND tu.projectId = :projectId");
+
+        Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("tudelFlg", Constants.DEL_FLG_0);
+        query.setParameter("delFlg", Constants.DEL_FLG_0);
+        query.setParameter("role", "MANAGER");
+        query.setParameter("projectId", projectId);
+
+        List<UserResponse> result = null;
+        try {
+            result = (List<UserResponse>) query.getResultList();
+        } catch (NoResultException e) {
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Integer> getManOldByProject(Integer projectId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT ");
+        sql.append("  u.userId ");
+        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
+        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
+        sql.append("      INNER JOIN ProjectUser tu ON tu.userId = u.userId ");
+        sql.append(" WHERE ");
+        sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND tu.delFlg = :tudelFlg");
+        sql.append("    AND r.name = :role");
+        sql.append("    AND tu.projectId = :projectId");
+
+        Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("tudelFlg", Constants.DEL_FLG_0);
+        query.setParameter("delFlg", Constants.DEL_FLG_0);
+        query.setParameter("role", "MANAGER");
+        query.setParameter("projectId", projectId);
+
+        List<Integer> result = null;
+        try {
+            result = (List<Integer>) query.getResultList();
+        } catch (NoResultException e) {
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<ManagerResponse> getUsersAddProject() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT new com.report.entity.response.ManagerResponse( ");
+        sql.append("  u.userId, ");
+        sql.append("  u.fullname, ");
+        sql.append("  u.email) ");
+        sql.append(" FROM User u INNER JOIN UserRole ur ON u.userId = ur.userId ");
+        sql.append("      INNER JOIN Role r ON r.roleId = ur.roleId ");
+        sql.append(" WHERE ");
+        sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND r.name = :role");
+
+        Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("delFlg", Constants.DEL_FLG_0);
+        query.setParameter("role", "MEMBER");
+
+        List<ManagerResponse> result = null;
+        try {
+            result = (List<ManagerResponse>) query.getResultList();
+        } catch (NoResultException e) {
+        }
+        return result;
+    }
+
+    @Override
+    public UserResponse getUserById(Integer userId) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT new com.report.entity.response.UserResponse( ");
+        sql.append("    u.userId,");
+        sql.append("    u.fullname,");
+        sql.append("    u.email,");
+        sql.append("    u.created,");
+        sql.append("    u.createdbyUsername,");
+        sql.append("    u.lastmodified,");
+        sql.append("    u.lastmodifiedbyUsername,");
+        sql.append("    r.name)");
+        sql.append(" FROM User u ");
+        sql.append("  INNER JOIN UserRole ur ON ur.userId = u.userId INNER JOIN Role r ON r.roleId = ur.roleId ");
+        sql.append(" WHERE ");
+        sql.append("    u.delFlg = :delFlg");
+        sql.append("    AND u.userId = :userId");
+
+        Query query = this.getEntityManager().createQuery(sql.toString());
+        query.setParameter("delFlg", Constants.DEL_FLG_0);
+        query.setParameter("userId", userId);
+
+        UserResponse result = null;
+        try {
+            result = (UserResponse) query.getSingleResult();
         } catch (NoResultException e) {
         }
         return result;

@@ -17,10 +17,11 @@ import com.report.dao.UserDao;
 import com.report.entity.ResultBean;
 import com.report.entity.User;
 import com.report.entity.UserRole;
-import com.report.entity.response.LeaderResponse;
-import com.report.entity.response.UserPageResponse;
+import com.report.entity.request.UserSearchListRequest;
+import com.report.entity.response.ManagerResponse;
+import com.report.entity.response.UserLogin;
 import com.report.entity.response.UserResponse;
-import com.report.entity.response.search.UserSearchListRequest;
+import com.report.entity.response.search.UserPageResponse;
 import com.report.service.UserService;
 import com.report.utils.Constants;
 import com.report.utils.DataUtil;
@@ -42,19 +43,9 @@ public class UserServiceImpl extends AbstractBaseDao implements UserService {
     }
 
     @Override
-    public ResultBean getLeaders() throws Exception {
-        List<LeaderResponse> report = userDao.getLeaders();
+    public ResultBean getManagers() throws Exception {
+        List<ManagerResponse> report = userDao.getManagers();
         return new ResultBean(report, "200", "OK");
-    }
-
-    @Override
-    public ResultBean getUsersAddTeam() throws Exception {
-        List<LeaderResponse> users = userDao.getUsers();
-        List<LeaderResponse> usersInTeam = userDao.getUsersInTeam();
-        for (LeaderResponse user : usersInTeam) {
-            users.removeIf(e -> e.getUserId() == user.getUserId());
-        }
-        return new ResultBean(users, "200", "OK");
     }
 
     @Override
@@ -166,6 +157,12 @@ public class UserServiceImpl extends AbstractBaseDao implements UserService {
         UserPageResponse response = null;
         searchListRequest.currentPage(page);
         searchListRequest.noRecordInPage(size);
+        if(fullname.equals("null") ||fullname.equals("undefined")) {
+            fullname = null;
+        }
+        if(date.equals("null") || date.equals("undefined")) {
+            date = null;
+        }
         searchListRequest.addSearchField("fullname", fullname, false);
         searchListRequest.addSearchField("created", date, true);
         searchListRequest.addsSortField("userId DESC");
@@ -206,8 +203,33 @@ public class UserServiceImpl extends AbstractBaseDao implements UserService {
     }
 
     @Override
-    public ResultBean getUsersByTeam(Integer team_id) {
-        List<UserResponse> usersInTeam = userDao.getUsersByTeam(team_id);
+    public ResultBean getUsersByProject(Integer projectId) {
+        List<UserResponse> usersInTeam = userDao.getUsersByProject(projectId);
         return new ResultBean(usersInTeam, "200", "OK");
+    }
+
+    @Override
+    public ResultBean getManByProject(Integer projectId) {
+        List<UserResponse> mansInTeam = userDao.getManByProject(projectId);
+        return new ResultBean(mansInTeam, "200", "OK");
+    }
+
+    @Override
+    public ResultBean getUsersAddProject() {
+        List<ManagerResponse> report = userDao.getUsersAddProject();
+        return new ResultBean(report, "200", "OK");
+    }
+
+    @Override
+    public ResultBean getUserInfo(HttpServletRequest request) {
+        UserLogin user = DataUtil.getUserInfoByToken(request);
+        user.setPassword("");
+        return new ResultBean(user, "200", "OK");
+    }
+
+    @Override
+    public ResultBean getUserById(Integer userId) {
+        UserResponse user = userDao.getUserById(userId);
+        return new ResultBean(user, "200", "OK");
     }
 }
