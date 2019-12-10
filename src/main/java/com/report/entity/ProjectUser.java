@@ -13,9 +13,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name = "dr_team_user")
-@NamedQuery(name = "TeamUser.findAll", query = "SELECT tu FROM TeamUser tu")
-public class TeamUser implements Serializable {
+@Table(name = "dr_project_user")
+@NamedQuery(name = "ProjectUser.findAll", query = "SELECT tu FROM ProjectUser tu")
+public class ProjectUser implements Serializable {
 
     /**
      * 
@@ -24,13 +24,13 @@ public class TeamUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_user_id")
-    @JsonProperty("team_user_id")
-    private Integer teamUserId;
+    @Column(name = "project_user_id")
+    @JsonProperty("project_user_id")
+    private Integer projectUserId;
 
-    @Column(name = "team_id")
-    @JsonProperty("team_id")
-    private Integer teamId;
+    @Column(name = "project_id")
+    @JsonProperty("project_id")
+    private Integer projectId;
 
     @Column(name = "user_id")
     @JsonProperty("user_id")
@@ -44,10 +44,6 @@ public class TeamUser implements Serializable {
     @JsonProperty("createdby_username")
     private String createdbyUsername;
 
-    @Column(name = "removed")
-    @JsonProperty("removed")
-    private String removed;
-
     @Column(name = "lastmodifiedby_username")
     @JsonProperty("lastmodifiedby_username")
     private String lastmodifiedbyUsername;
@@ -60,28 +56,20 @@ public class TeamUser implements Serializable {
     @JsonProperty("del_flg")
     private String delFlg;
 
-    public Integer getTeamUserId() {
-        return teamUserId;
+    public Integer getProjectUserId() {
+        return projectUserId;
     }
 
-    public String getLastmodified() {
-        return lastmodified;
+    public void setProjectUserId(Integer projectUserId) {
+        this.projectUserId = projectUserId;
     }
 
-    public void setLastmodified(String lastmodified) {
-        this.lastmodified = lastmodified;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setTeamUserId(Integer teamUserId) {
-        this.teamUserId = teamUserId;
-    }
-
-    public Integer getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public Integer getUserId() {
@@ -116,37 +104,19 @@ public class TeamUser implements Serializable {
         this.lastmodifiedbyUsername = lastmodifiedbyUsername;
     }
 
+    public String getLastmodified() {
+        return lastmodified;
+    }
+
+    public void setLastmodified(String lastmodified) {
+        this.lastmodified = lastmodified;
+    }
+
     public String getDelFlg() {
         return delFlg;
     }
 
     public void setDelFlg(String delFlg) {
-        this.delFlg = delFlg;
-    }
-
-    public TeamUser() {
-        super();
-    }
-
-    public String getRemoved() {
-        return removed;
-    }
-
-    public void setRemoved(String removed) {
-        this.removed = removed;
-    }
-
-    public TeamUser(Integer teamUserId, Integer teamId, Integer userId, String created, String createdbyUsername, String removed, String lastmodifiedbyUsername,
-            String lastmodified, String delFlg) {
-        super();
-        this.teamUserId = teamUserId;
-        this.teamId = teamId;
-        this.userId = userId;
-        this.created = created;
-        this.createdbyUsername = createdbyUsername;
-        this.removed = removed;
-        this.lastmodifiedbyUsername = lastmodifiedbyUsername;
-        this.lastmodified = lastmodified;
         this.delFlg = delFlg;
     }
 

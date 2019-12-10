@@ -34,11 +34,11 @@ public class ReportController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/reports/task/{task_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<ResultBean> getReportsByTask(@PathVariable Integer task_id) {
+    @RequestMapping(value = "/api/reports/issue/{issue_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getReportsByTask(@PathVariable Integer issue_id, Integer page, Integer size) {
         log.info("### getReportsByTask() START ###");
         ResultBean resultBean = null;
-        resultBean = reportService.getReportsByTask(task_id);
+        resultBean = reportService.getReportsByIssue(issue_id, page, size);
         log.info("### getReportsByTask() END ###");
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }

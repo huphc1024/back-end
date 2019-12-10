@@ -1,68 +1,95 @@
-package com.report.entity.response;
+package com.report.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TaskResponse implements Serializable {
+@Entity
+@Table(name = "dr_issue")
+@NamedQuery(name = "Issue.findAll", query = "SELECT t FROM Issue t")
+public class Issue implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("task_id")
-    private Integer taskId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "issue_id")
+    @JsonProperty("issue_id")
+    private Integer issueId;
 
+    @Column(name = "user_id")
     @JsonProperty("user_id")
     private Integer userId;
 
-    @JsonProperty("team_id")
-    private Integer teamId;
+    @Column(name = "project_id")
+    @JsonProperty("project_id")
+    private Integer projectId;
 
+    @Column(name = "name")
     @JsonProperty("name")
     private String name;
 
+    @Column(name = "description")
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("content")
-    private String content;
-
+    @Column(name = "start_date")
     @JsonProperty("start_date")
     private String startDate;
 
+    @Column(name = "finish_date")
     @JsonProperty("finish_date")
     private String finishDate;
 
+    @Column(name = "done")
     @JsonProperty("done")
     private String done;
 
+    @Column(name = "work_type")
     @JsonProperty("work_type")
     private String workType;
 
-    @JsonProperty("unit")
-    private String unit;
-
+    @Column(name = "status")
     @JsonProperty("status")
     private String status;
 
+    @Column(name = "created")
     @JsonProperty("created")
     private String created;
 
+    @Column(name = "createdby_username")
     @JsonProperty("createdby_username")
     private String createdbyUsername;
 
+    @Column(name = "lastmodified")
     @JsonProperty("lastmodified")
     private String lastmodified;
+    
+    @Column(name = "lastmodifiedby_username")
+    @JsonProperty("lastmodifiedby_username")
+    private String lastmodifiedbyUsername;
 
-    public Integer getTaskId() {
-        return taskId;
+    @Column(name = "del_flg")
+    @JsonProperty("del_flg")
+    private String delFlg;
+
+    public Integer getIssueId() {
+        return issueId;
     }
 
-    public void setTaskId(Integer taskId) {
-        this.taskId = taskId;
+    public void setIssueId(Integer issueId) {
+        this.issueId = issueId;
     }
 
     public Integer getUserId() {
@@ -73,12 +100,12 @@ public class TaskResponse implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getTeamId() {
-        return teamId;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public String getName() {
@@ -97,14 +124,6 @@ public class TaskResponse implements Serializable {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String getStartDate() {
         return startDate;
     }
@@ -121,20 +140,20 @@ public class TaskResponse implements Serializable {
         this.finishDate = finishDate;
     }
 
+    public String getDone() {
+        return done;
+    }
+
+    public void setDone(String done) {
+        this.done = done;
+    }
+
     public String getWorkType() {
         return workType;
     }
 
     public void setWorkType(String workType) {
         this.workType = workType;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     public String getStatus() {
@@ -169,37 +188,21 @@ public class TaskResponse implements Serializable {
         this.lastmodified = lastmodified;
     }
 
-    public String getDone() {
-        return done;
+    public String getLastmodifiedbyUsername() {
+        return lastmodifiedbyUsername;
     }
 
-    public void setDone(String done) {
-        this.done = done;
+    public void setLastmodifiedbyUsername(String lastmodifiedbyUsername) {
+        this.lastmodifiedbyUsername = lastmodifiedbyUsername;
     }
 
-    public TaskResponse(Integer taskId, Integer userId, Integer teamId, String name, String description, String content, String startDate, String finishDate,
-            String done, String workType, String unit, String status, String created, String createdbyUsername, String lastmodified) {
-        super();
-        this.taskId = taskId;
-        this.userId = userId;
-        this.teamId = teamId;
-        this.name = name;
-        this.description = description;
-        this.content = content;
-        this.startDate = startDate;
-        this.finishDate = finishDate;
-        this.done = done;
-        this.workType = workType;
-        this.unit = unit;
-        this.status = status;
-        this.created = created;
-        this.createdbyUsername = createdbyUsername;
-        this.lastmodified = lastmodified;
+    public String getDelFlg() {
+        return delFlg;
     }
 
-    public TaskResponse() {
-        super();
-        // TODO Auto-generated constructor stub
+    public void setDelFlg(String delFlg) {
+        this.delFlg = delFlg;
     }
+
 
 }

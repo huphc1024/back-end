@@ -1,12 +1,10 @@
-package com.report.entity.response.search;
+package com.report.entity.request;
 
 import org.apache.commons.collections4.MapUtils;
 
-import com.report.entity.User;
-import com.report.entity.request.PageRequest;
-import com.report.entity.response.UserPageResponse;
+import com.report.entity.Bug;
 
-public class UserSearchListRequest extends PageRequest {
+public class BugSearchListRequest extends PageRequest{
 
     /**
      * 
@@ -20,18 +18,18 @@ public class UserSearchListRequest extends PageRequest {
             this.searchFields.forEach((k, v) -> {
                 switch (k) {
                 case "created":
-                    sqlWhere.append(String.format(" AND u.created >= :%s ", k));
+                    sqlWhere.append(String.format(" AND b.created >= :%s ", k));
                     break;
                 default:
                     if (v instanceof String) {
                         String value = (String) v;
                         if (value.startsWith("%") || value.endsWith("%")) {
-                            sqlWhere.append(String.format(" AND u.%s LIKE :%s ", k, k));
+                            sqlWhere.append(String.format(" AND b.%s LIKE :%s ", k, k));
                         } else {
-                            sqlWhere.append(String.format(" AND u.%s = :%s ", k, k));
+                            sqlWhere.append(String.format(" AND b.%s = :%s ", k, k));
                         }
                     } else {
-                        sqlWhere.append(String.format(" AND u.%s = :%s ", k, k));
+                        sqlWhere.append(String.format(" AND b.%s = :%s ", k, k));
                     }
                 }
             });
@@ -44,29 +42,29 @@ public class UserSearchListRequest extends PageRequest {
     @Override
     public StringBuilder getQuery() {
         StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT u ");
-        sql.append(" FROM User u ");
+        sql.append(" SELECT b ");
+        sql.append(" FROM Bug b ");
         appendCondition(sql);
-        sql.append(getSqlSort("u"));
+        sql.append(getSqlSort("b"));
         return sql;
     }
 
     @Override
     public StringBuilder getCount() {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(u) FROM User u ");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(b) FROM Bug b ");
         appendCondition(sql);
         return sql;
     }
 
     @Override
-    public Class<User> getEntityClass() {
-        return User.class;
+    public Class<Bug> getEntityClass() {
+        return Bug.class;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Class<UserPageResponse> getResponseClass() {
-        return UserPageResponse.class;
+    public Class<BugPageResponse> getResponseClass() {
+        return BugPageResponse.class;
     }
 
 }

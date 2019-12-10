@@ -25,11 +25,11 @@ public class UserController {
     @Resource
     private UserLoginService userLoginService;
 
-    @RequestMapping(value = "/api/leaders", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<ResultBean> getLeaders() {
+    @RequestMapping(value = "/api/managers", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getManagers() {
         ResultBean resultBean = null;
         try {
-            resultBean = userService.getLeaders();
+            resultBean = userService.getManagers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,11 +43,11 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/users/add-team", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<ResultBean> getUsersAddTeam() {
+    @RequestMapping(value = "/api/users/add-project", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getUsersAddProject() {
         ResultBean resultBean = null;
         try {
-            resultBean = userService.getUsersAddTeam();
+            resultBean = userService.getUsersAddProject();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,11 +65,22 @@ public class UserController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/users/team/{team_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<ResultBean> getUsersByTeam(@PathVariable Integer team_id) {
+    @RequestMapping(value = "/api/users/project/{project_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getUsersByProject(@PathVariable Integer project_id) {
         ResultBean resultBean = null;
         try {
-            resultBean = userService.getUsersByTeam(team_id);
+            resultBean = userService.getUsersByProject(project_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/api/managers/project/{project_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getMansByProject(@PathVariable Integer project_id) {
+        ResultBean resultBean = null;
+        try {
+            resultBean = userService.getManByProject(project_id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,7 +109,7 @@ public class UserController {
         return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/user/change-pass", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/api/change-pass", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ResultBean> changePass(HttpServletRequest request, @RequestBody String json) {
         ResultBean resultBean = null;
         try {
@@ -114,6 +125,28 @@ public class UserController {
         ResultBean resultBean = null;
         try {
             resultBean = userService.reset(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/api/info-user", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getUsersLogin(HttpServletRequest request) {
+        ResultBean resultBean = null;
+        try {
+            resultBean = userService.getUserInfo(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<ResultBean>(resultBean, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/api/user/{user_id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<ResultBean> getUsersLogin(@PathVariable Integer user_id) {
+        ResultBean resultBean = null;
+        try {
+            resultBean = userService.getUserById(user_id);
         } catch (Exception e) {
             e.printStackTrace();
         }

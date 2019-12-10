@@ -12,5 +12,5 @@ public interface ReportService {
 
     public ResultBean updateReport(HttpServletRequest request, String json) throws Exception;
 
-    public ResultBean getReportsByTask(Integer taskId);
+    public ResultBean getReportsByIssue(Integer issueId, Integer page, Integer size);
 }

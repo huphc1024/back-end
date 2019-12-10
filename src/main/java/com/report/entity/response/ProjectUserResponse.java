@@ -1,26 +1,15 @@
 package com.report.entity.response;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LeaderResponse implements Serializable {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
+public class ProjectUserResponse {
+    
     @Column(name = "user_id")
     @JsonProperty("user_id")
     private Integer userId;
 
-    @Column(name = "fullname")
-    @JsonProperty("fullname")
-    private String fullname;
-    
     @Column(name = "email")
     @JsonProperty("email")
     private String email;
@@ -33,14 +22,6 @@ public class LeaderResponse implements Serializable {
         this.userId = userId;
     }
 
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -49,17 +30,15 @@ public class LeaderResponse implements Serializable {
         this.email = email;
     }
 
-    public LeaderResponse(Integer userId, String fullname, String email) {
+    public ProjectUserResponse(Integer userId, String email) {
         super();
         this.userId = userId;
-        this.fullname = fullname;
         this.email = email;
     }
 
-    public LeaderResponse() {
+    public ProjectUserResponse() {
         super();
         // TODO Auto-generated constructor stub
     }
-
     
 }

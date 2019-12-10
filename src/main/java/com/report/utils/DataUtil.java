@@ -47,19 +47,19 @@ public class DataUtil {
     private static final String harfSymbols = " !\\\"#$%&\'()*+,\\-./:;<=>?@\\[\\\\\\]\\^_`{|}~ﾞ";
 
     /** The Constant YYYYMMDD_FORMAT. */
-    private static final SimpleDateFormat YYYYMMDD_FORMAT = new SimpleDateFormat("yyyyMMdd");
+    private static final SimpleDateFormat YYYYMMDD_FORMAT = new SimpleDateFormat("ddMMyyyy");
 
     /** The Constant YYYY_MM_DD_FORMAT. */
-    private static final SimpleDateFormat YYYY_MM_DD_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+    private static final SimpleDateFormat YYYY_MM_DD_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     /** The Constant YYYYMMDDHHMMSS_FORMAT. */
-    private static final SimpleDateFormat YYYYMMDDHHMMSS_FORMAT = new SimpleDateFormat("YYYY/MM/dd HH:mm");
+    private static final SimpleDateFormat YYYYMMDDHHMMSS_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     /** The Constant YYYYMMDDHHMMSS_FORMAT_STR. */
-    private static final String YYYYMMDDHHMMSS_FORMAT_STR = "YYYY/MM/dd HH:mm";
+    private static final String YYYYMMDDHHMMSS_FORMAT_STR = "dd/MM/yyyy HH:mm";
 
     /** The Constant YYYY$MM$DD_FORMAT. */
-    private static final SimpleDateFormat YYYY$MM$DD_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+    private static final SimpleDateFormat YYYY$MM$DD_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     public static final String TOKEN_PREFIX = "Bearer";
 

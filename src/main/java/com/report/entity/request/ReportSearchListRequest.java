@@ -1,17 +1,14 @@
-package com.report.entity.response.search;
+package com.report.entity.request;
 
 import org.apache.commons.collections4.MapUtils;
 
-import com.report.entity.Bug;
-import com.report.entity.request.BugPageResponse;
-import com.report.entity.request.PageRequest;
+import com.report.entity.Report;
+import com.report.entity.response.search.ReportPageResponse;
 
-public class BugSearchListRequest extends PageRequest{
+public class ReportSearchListRequest extends PageRequest {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
+
 
     @Override
     protected void appendCondition(StringBuilder sql) {
@@ -19,19 +16,19 @@ public class BugSearchListRequest extends PageRequest{
             StringBuilder sqlWhere = new StringBuilder();
             this.searchFields.forEach((k, v) -> {
                 switch (k) {
-                case "created":
-                    sqlWhere.append(String.format(" AND b.created >= :%s ", k));
+                case "issueId":
+                    sqlWhere.append(String.format(" AND r.issueId = :%s ", k));
                     break;
                 default:
                     if (v instanceof String) {
                         String value = (String) v;
                         if (value.startsWith("%") || value.endsWith("%")) {
-                            sqlWhere.append(String.format(" AND b.%s LIKE :%s ", k, k));
+                            sqlWhere.append(String.format(" AND r.%s LIKE :%s ", k, k));
                         } else {
-                            sqlWhere.append(String.format(" AND b.%s = :%s ", k, k));
+                            sqlWhere.append(String.format(" AND r.%s = :%s ", k, k));
                         }
                     } else {
-                        sqlWhere.append(String.format(" AND b.%s = :%s ", k, k));
+                        sqlWhere.append(String.format(" AND r.%s = :%s ", k, k));
                     }
                 }
             });
@@ -44,29 +41,29 @@ public class BugSearchListRequest extends PageRequest{
     @Override
     public StringBuilder getQuery() {
         StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT b ");
-        sql.append(" FROM Bug b ");
+        sql.append(" SELECT r ");
+        sql.append(" FROM Report r ");
         appendCondition(sql);
-        sql.append(getSqlSort("b"));
+        sql.append(getSqlSort("r"));
         return sql;
     }
 
     @Override
     public StringBuilder getCount() {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(b) FROM Bug b ");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(r) FROM Report r ");
         appendCondition(sql);
         return sql;
     }
 
     @Override
-    public Class<Bug> getEntityClass() {
-        return Bug.class;
+    public Class<Report> getEntityClass() {
+        return Report.class;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Class<BugPageResponse> getResponseClass() {
-        return BugPageResponse.class;
+    public Class<ReportPageResponse> getResponseClass() {
+        return ReportPageResponse.class;
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.report.dao.AbstractBaseDao;
 import com.report.dao.ReportDao;
 import com.report.entity.Report;
+import com.report.entity.request.ReportSearchListRequest;
+import com.report.entity.response.search.ReportPageResponse;
 import com.report.utils.Constants;
 
 @Repository
@@ -50,15 +52,15 @@ public class ReportDaoImpl extends AbstractBaseDao implements ReportDao{
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Report> getReportByTask(Integer taskId) {
+    public List<Report> getReportByIssue(Integer issueId) {
         StringBuilder sql = new StringBuilder();
         sql.append(" FROM Report ");
         sql.append(" WHERE ");
-        sql.append("    taskId = :taskId");
+        sql.append("    issueId = :issueId");
         sql.append("    AND delFlg = :delFlg ORDER BY reportId DESC");
 
         Query query = this.getEntityManager().createQuery(sql.toString());
-        query.setParameter("taskId", taskId);
+        query.setParameter("issueId", issueId);
         query.setParameter("delFlg", Constants.DEL_FLG_0);
         
         List<Report> result = null;
@@ -67,6 +69,11 @@ public class ReportDaoImpl extends AbstractBaseDao implements ReportDao{
         } catch (NoResultException e) {
         }
         return result;
+    }
+
+    @Override
+    public ReportPageResponse findAll(ReportSearchListRequest searchListRequest) {
+        return super.findAll(searchListRequest);
     }
 
 }

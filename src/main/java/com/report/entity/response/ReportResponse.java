@@ -1,56 +1,37 @@
-package com.report.entity;
+package com.report.entity.response;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-@Table(name = "dr_report")
-public class Report implements Serializable {
+public class ReportResponse implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id")
     @JsonProperty("report_id")
     private Integer reportId;
 
-    @Column(name = "issue_id")
     @JsonProperty("issue_id")
     private Integer issueId;
 
-    @Column(name = "content")
     @JsonProperty("content")
     private String content;
 
-    @Column(name = "created")
     @JsonProperty("created")
     private String created;
 
-    @Column(name = "createdby")
     @JsonProperty("createdby")
     private String createdby;
 
-    @Column(name = "lastmodified")
     @JsonProperty("lastmodified")
     private String lastmodified;
 
-    @Column(name = "lastmodifiedby")
     @JsonProperty("lastmodifiedby")
     private String lastmodifiedby;
 
-    @Column(name = "del_flg")
     @JsonProperty("del_flg")
     private String delFlg;
 
@@ -118,5 +99,24 @@ public class Report implements Serializable {
         this.delFlg = delFlg;
     }
 
+    public ReportResponse(Integer reportId, Integer issueId, String content, String created, String createdby, String lastmodified, String lastmodifiedby,
+            String delFlg) {
+        super();
+        this.reportId = reportId;
+        this.issueId = issueId;
+        this.content = content;
+        this.created = created;
+        this.createdby = createdby;
+        this.lastmodified = lastmodified;
+        this.lastmodifiedby = lastmodifiedby;
+        this.delFlg = delFlg;
+    }
+
+    public ReportResponse() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
     
+
 }

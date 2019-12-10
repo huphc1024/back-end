@@ -11,7 +11,7 @@ import com.report.dao.AbstractBaseDao;
 import com.report.dao.BugDao;
 import com.report.entity.Bug;
 import com.report.entity.request.BugPageResponse;
-import com.report.entity.response.search.BugSearchListRequest;
+import com.report.entity.request.BugSearchListRequest;
 import com.report.utils.Constants;
 
 @Repository

@@ -40,18 +40,15 @@ public class SendMail {
         javaMailSender.send(msg);
     }
     
-    public void sendMailAddTeam(List<User> users, String teamName, String leader) throws MessagingException {
+    public void sendMailAddProject(List<User> users, String projectName) throws MessagingException {
         for (User user : users) {
             MimeMessage msg = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(msg, true);
             helper.setTo(user.getEmail());
-            helper.setSubject("Thông báo về nhóm mới");
+            helper.setSubject("Thông báo về dự án mới");
             helper.setText("<!DOCTYPE html><html><body><p>Chào mừng bạn "+ user.getFullname() + "! \r\n" + 
-                    "  <br>Chào bạn vào nhóm :\r\n" + teamName +
+                    "  <br>Chào bạn vào dự án :\r\n" + projectName +
                     "</p>\r\n" + 
-                    "<p>Nhóm trưởng là : \r\n" +  leader + "\r\n" + 
-                    "  <br>\r\n" + 
-                    "  <br>\r\n" + 
                     "</p></body></html>", true);
 
             javaMailSender.send(msg);
@@ -67,8 +64,6 @@ public class SendMail {
             helper.setText("<!DOCTYPE html><html><body><p>Chào mừng bạn "+ user.getFullname() + "! \r\n" + 
                     "  <br>Công việc bạn được phân công là :\r\n" + taskName +
                     "</p>\r\n" + 
-                    "<p>Người tạo : \r\n" +  taskName + "\r\n" + 
-                    "  <br>\r\n" + 
                     "  <br>\r\n" + 
                     "</p></body></html>", true);
 
